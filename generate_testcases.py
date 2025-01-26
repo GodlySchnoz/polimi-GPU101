@@ -26,7 +26,9 @@ def generate_crs_matrix_to_file(size: int, num_connections: int, filename: str):
         file.write(f"{size} {size} {num_connections}\n")
 
         # Write each connection as `row col val` (value = 1 as it won't affect the result, value is present just to match the format and make it a valid CRS matrix but it's not used in the algoritm that this is generating testcases/benchmarks for)
-        for i, j in sorted(connections):  # Sort for easier debugging (doesn't affect the result)
+        # for i, j in sorted(connections):  # Sort for easier debugging (doesn't affect the result)
+        #     file.write(f"{i} {j} 1\n")
+        for i, j in connections:  # unsorted for faster processing and to make the matrix more random
             file.write(f"{i} {j} 1\n")
             
 def abbreviate_number(num: int) -> str:
