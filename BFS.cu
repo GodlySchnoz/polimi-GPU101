@@ -5,7 +5,8 @@
 #include <climits>
 #include <cuda_runtime.h>
 
-#define MAX_FRONTIER_SIZE 128
+#define MAX_FRONTIER_SIZE 128 // Maximum number of vertices in the frontier, actual implementation uses a dynamic frontier size
+#define UNEXPLORED -1
 
 #define CHECK(call)                                                                     \
 {                                                                                       \
@@ -48,7 +49,7 @@ void bfs_cuda(std::vector<int> &Va, std::vector<int> &Ea, int source, int num_ve
     // Host-side initialization
     std::vector<char> Fa(num_vertex, 0);
     std::vector<char> Xa(num_vertex, 0);
-    std::vector<int> Ca(num_vertex, INT_MAX);
+    std::vector<int> Ca(num_vertex, UNEXPLORED);
 
     Fa[source] = 1;
     Ca[source] = 0;
@@ -95,10 +96,10 @@ void bfs_cuda(std::vector<int> &Va, std::vector<int> &Ea, int source, int num_ve
     // Copy final distances back to the host
     CHECK(cudaMemcpy(Ca.data(), Ca_d, num_vertex * sizeof(int), cudaMemcpyDeviceToHost));
 
-    // Print results
-    for (int i = 0; i < num_vertex; ++i) {
-        std::cout << "Vertex " << i + 1 << " Distance: " << Ca[i] << std::endl;
-    }
+    // // Print results suppressed for final submission
+    // for (int i = 0; i < num_vertex; ++i) {
+    //     std::cout << "Vertex " << i + 1 << " Distance: " << Ca[i] << std::endl;
+    // }
 
     // Free device memory
     cudaFree(Va_d);
